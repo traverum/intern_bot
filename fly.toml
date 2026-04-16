@@ -1,0 +1,15 @@
+app = "traverum-intern-bot"
+primary_region = "ams"
+
+[build]
+
+[env]
+  NODE_ENV = "production"
+  CLAUDE_MODEL = "claude-sonnet-4-20250514"
+  POSTHOG_HOST = "https://eu.posthog.com"
+  GITHUB_BRAIN_OWNER = "traverum"
+  GITHUB_BRAIN_REPO = "brain"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

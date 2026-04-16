@@ -1,0 +1,26 @@
+{
+  "name": "intern-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Intern — Traverum's Telegram bot for brain and analytics queries",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.89.0",
+    "@octokit/rest": "^21.1.1",
+    "grammy": "^1.42.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}
