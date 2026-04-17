@@ -34,3 +34,11 @@ export function trackTokens(inputTokens: number, outputTokens: number): void {
     `Tokens this month: ${monthlyTokensUsed.toLocaleString()} / ${config.claude.monthlyTokenBudget.toLocaleString()}`,
   );
 }
+
+export function getTokenStats() {
+  return {
+    used: monthlyTokensUsed,
+    budget: config.claude.monthlyTokenBudget,
+    month: currentMonth,
+  };
+}

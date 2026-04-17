@@ -16,8 +16,11 @@ try {
 
 // Dynamic import so config.ts sees the env vars
 const { bot } = await import("./bot.js");
+const { startAdminServer } = await import("./admin.js");
 
 console.log("Starting Intern bot...");
+
+startAdminServer();
 
 bot.start({
   onStart: (botInfo) => {

@@ -5,6 +5,7 @@ import { allTools } from "./tools.js";
 import { getHistory, addMessage } from "../memory/conversation.js";
 import { dispatchTool } from "../tools/index.js";
 import { trackTokens } from "../utils/rate-limit.js";
+import { logOperation } from "../utils/token-log.js";
 
 const anthropic = new Anthropic({ apiKey: config.claude.apiKey });
 
@@ -19,6 +20,9 @@ export async function handleMessage(
 
   let messages = getHistory(chatId);
   let iterations = 0;
+  let totalInput = 0;
+  let totalOutput = 0;
+  const toolsUsed: string[] = [];
 
   while (iterations < MAX_TOOL_ITERATIONS) {
     iterations++;
@@ -31,6 +35,8 @@ export async function handleMessage(
       messages,
     });
 
+    totalInput += response.usage.input_tokens;
+    totalOutput += response.usage.output_tokens;
     trackTokens(response.usage.input_tokens, response.usage.output_tokens);
 
     // Collect text and tool-use blocks
@@ -45,11 +51,15 @@ export async function handleMessage(
     if (toolUseBlocks.length === 0) {
       const reply = textBlocks.map((b) => b.text).join("\n") || "...";
       addMessage(chatId, { role: "assistant", content: response.content });
+      logOperation({ ts: new Date().toISOString(), chatId, userName, tools: toolsUsed, inputTokens: totalInput, outputTokens: totalOutput });
       return reply;
     }
 
     // Store assistant response with tool use
     addMessage(chatId, { role: "assistant", content: response.content });
+
+    // Track tool names used this turn
+    for (const t of toolUseBlocks) toolsUsed.push(t.name);
 
     // Execute tools and collect results
     const toolResults: Anthropic.ToolResultBlockParam[] = await Promise.all(
@@ -79,6 +89,7 @@ export async function handleMessage(
     messages = getHistory(chatId);
   }
 
+  logOperation({ ts: new Date().toISOString(), chatId, userName, tools: toolsUsed, inputTokens: totalInput, outputTokens: totalOutput });
   return "I hit my tool-use limit for this question. Try breaking it into smaller questions.";
 }
 
