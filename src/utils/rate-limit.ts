@@ -14,7 +14,7 @@ export function checkRateLimit(userId: number): string | null {
   }
 
   // Monthly token budget
-  if (monthlyTokensUsed >= config.claude.monthlyTokenBudget) {
+  if (monthlyTokensUsed >= config.llm.monthlyTokenBudget) {
     return "I've hit my monthly token budget. Let Elias know if you need it increased.";
   }
 
@@ -31,14 +31,14 @@ export function checkRateLimit(userId: number): string | null {
 export function trackTokens(inputTokens: number, outputTokens: number): void {
   monthlyTokensUsed += inputTokens + outputTokens;
   console.log(
-    `Tokens this month: ${monthlyTokensUsed.toLocaleString()} / ${config.claude.monthlyTokenBudget.toLocaleString()}`,
+    `Tokens this month: ${monthlyTokensUsed.toLocaleString()} / ${config.llm.monthlyTokenBudget.toLocaleString()}`,
   );
 }
 
 export function getTokenStats() {
   return {
     used: monthlyTokensUsed,
-    budget: config.claude.monthlyTokenBudget,
+    budget: config.llm.monthlyTokenBudget,
     month: currentMonth,
   };
 }

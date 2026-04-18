@@ -1,14 +1,12 @@
-import Anthropic from "@anthropic-ai/sdk";
+import type { NormalizedTool } from "../providers/types.js";
 
-type ToolDef = Anthropic.Tool;
-
-export const brainReadTools: ToolDef[] = [
+export const brainReadTools: NormalizedTool[] = [
   {
     name: "brain_read_file",
     description:
       "Read the contents of a file from the brain (knowledge base). Use this after brain_search to read specific files.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         path: {
           type: "string",
@@ -23,8 +21,8 @@ export const brainReadTools: ToolDef[] = [
     name: "brain_list_directory",
     description:
       "List files and subdirectories in a brain directory. Use to explore the knowledge base structure.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         path: {
           type: "string",
@@ -39,8 +37,8 @@ export const brainReadTools: ToolDef[] = [
     name: "brain_search",
     description:
       "Full-text search across the brain repo. Use this FIRST to find relevant files before reading them.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         query: {
           type: "string",
@@ -52,58 +50,13 @@ export const brainReadTools: ToolDef[] = [
   },
 ];
 
-export const brainWriteTools: ToolDef[] = [
-  {
-    name: "brain_write_files",
-    description:
-      "Create or update files in the brain via a pull request. Creates a branch, commits changes, and opens a PR. Cannot write to sources/ directory. When editing wiki files, include an update to memory/wiki/log.md.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        branch_slug: {
-          type: "string",
-          description:
-            'Short slug for the branch name (will be prefixed with intern/YYYY-MM-DD-). E.g. "update-cancellation-policy"',
-        },
-        pr_title: {
-          type: "string",
-          description: "Pull request title",
-        },
-        pr_body: {
-          type: "string",
-          description: "Pull request description",
-        },
-        files: {
-          type: "array",
-          description: "Files to create or update",
-          items: {
-            type: "object",
-            properties: {
-              path: {
-                type: "string",
-                description: "File path relative to repo root",
-              },
-              content: {
-                type: "string",
-                description: "Full file content",
-              },
-            },
-            required: ["path", "content"],
-          },
-        },
-      },
-      required: ["branch_slug", "pr_title", "pr_body", "files"],
-    },
-  },
-];
-
-export const posthogTools: ToolDef[] = [
+export const posthogTools: NormalizedTool[] = [
   {
     name: "posthog_query",
     description:
       "Run a HogQL query against PostHog. Use posthog_event_definitions first to discover available events and properties.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         query: {
           type: "string",
@@ -118,8 +71,8 @@ export const posthogTools: ToolDef[] = [
     name: "posthog_trend",
     description:
       "Get event counts over time (trend). Returns time series data for one or more events.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         events: {
           type: "array",
@@ -157,8 +110,8 @@ export const posthogTools: ToolDef[] = [
     name: "posthog_funnel",
     description:
       "Analyze conversion between sequential steps. Shows drop-off between events.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         events: {
           type: "array",
@@ -191,8 +144,8 @@ export const posthogTools: ToolDef[] = [
     name: "posthog_event_definitions",
     description:
       "List available event definitions in PostHog. Use this FIRST to discover what events are tracked before writing queries.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         search: {
           type: "string",
@@ -210,8 +163,8 @@ export const posthogTools: ToolDef[] = [
     name: "posthog_dashboards",
     description:
       "List dashboards, or get a specific dashboard with its insights.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         dashboard_id: {
           type: "number",
@@ -225,8 +178,8 @@ export const posthogTools: ToolDef[] = [
   {
     name: "posthog_feature_flags",
     description: "List feature flags and their current status.",
-    input_schema: {
-      type: "object" as const,
+    inputSchema: {
+      type: "object",
       properties: {
         search: {
           type: "string",
@@ -238,8 +191,7 @@ export const posthogTools: ToolDef[] = [
   },
 ];
 
-export const allTools: ToolDef[] = [
+export const allTools: NormalizedTool[] = [
   ...brainReadTools,
-  ...brainWriteTools,
   ...posthogTools,
 ];

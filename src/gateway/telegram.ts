@@ -1,18 +1,25 @@
 import { Bot, Context } from "grammy";
-import { config } from "./config.js";
-import { handleMessage } from "./claude/client.js";
-import { checkRateLimit } from "./utils/rate-limit.js";
+import { config } from "../config.js";
+import { runAgent, getAgent } from "../agents/runAgent.js";
+import { checkRateLimit } from "../utils/rate-limit.js";
 
-export const bot = new Bot(config.telegram.botToken);
+const AGENT_NAME = "kip";
+
+const agent = getAgent(AGENT_NAME);
+if (!agent) throw new Error(`Agent not found: ${AGENT_NAME}`);
+
+const token = process.env[agent.botTokenEnv];
+if (!token) throw new Error(`Missing bot token env: ${agent.botTokenEnv}`);
+
+export const bot = new Bot(token);
 
 const botUsername = new Promise<string>((resolve) => {
-  bot.api.getMe().then((me) => resolve(me.username ?? "intern_bot"));
+  bot.api.getMe().then((me) => resolve(me.username ?? `${AGENT_NAME}_bot`));
 });
 
 function isAllowedChat(ctx: Context): boolean {
   const chatId = ctx.chat?.id;
   if (!chatId) return false;
-  // Allow all chats when no IDs configured (setup mode)
   if (config.telegram.allowedChatIds.length === 0) return true;
   return config.telegram.allowedChatIds.includes(chatId);
 }
@@ -20,24 +27,23 @@ function isAllowedChat(ctx: Context): boolean {
 async function isMentionedOrReply(ctx: Context): Promise<boolean> {
   if (!ctx.message?.text) return false;
 
-  // Direct reply to the bot
   if (ctx.message.reply_to_message?.from?.is_bot) {
     const me = await botUsername;
     if (ctx.message.reply_to_message.from.username === me) return true;
   }
 
-  // @mention
   const me = await botUsername;
   if (ctx.message.text.includes(`@${me}`)) return true;
 
-  // Private chat (DM)
   if (ctx.chat?.type === "private") return true;
 
   return false;
 }
 
 bot.on("message:text", async (ctx) => {
-  console.log(`Message from chat ${ctx.chat.id} (${ctx.chat.type}${ctx.chat.type !== "private" ? `, "${ctx.chat.title}"` : ""}) by ${ctx.from?.first_name}`);
+  console.log(
+    `Message from chat ${ctx.chat.id} (${ctx.chat.type}${ctx.chat.type !== "private" ? `, "${ctx.chat.title}"` : ""}) by ${ctx.from?.first_name}`,
+  );
 
   if (!isAllowedChat(ctx)) {
     console.log(`  → Ignored (unauthorized chat)`);
@@ -61,7 +67,7 @@ bot.on("message:text", async (ctx) => {
 
   try {
     await ctx.replyWithChatAction("typing");
-    const response = await handleMessage(chatId, userName, text);
+    const response = await runAgent(AGENT_NAME, chatId, userName, text);
     await sendLongMessage(ctx, response);
   } catch (err) {
     console.error("Error handling message:", err);
@@ -75,7 +81,6 @@ async function sendLongMessage(ctx: Context, text: string) {
     await ctx.reply(text);
     return;
   }
-  // Split on newlines, respecting Telegram's limit
   let remaining = text;
   while (remaining.length > 0) {
     if (remaining.length <= MAX_LENGTH) {

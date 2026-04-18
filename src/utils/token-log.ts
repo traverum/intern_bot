@@ -9,6 +9,9 @@ export interface TokenLogEntry {
   tools: string[];
   inputTokens: number;
   outputTokens: number;
+  provider?: "anthropic" | "openai";
+  toolMode?: "local" | "mcp";
+  model?: string;
 }
 
 export function logOperation(entry: TokenLogEntry): void {

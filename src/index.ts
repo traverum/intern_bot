@@ -15,16 +15,16 @@ try {
 } catch {}
 
 // Dynamic import so config.ts sees the env vars
-const { bot } = await import("./bot.js");
+const { bot } = await import("./gateway/telegram.js");
 const { startAdminServer } = await import("./admin.js");
 
-console.log("Starting Intern bot...");
+console.log("Starting Veyond Crew...");
 
 startAdminServer();
 
 bot.start({
   onStart: (botInfo) => {
-    console.log(`Intern bot running as @${botInfo.username}`);
+    console.log(`Kip running as @${botInfo.username}`);
   },
 });
 

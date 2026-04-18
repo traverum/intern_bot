@@ -1,5 +1,4 @@
 import { brainReadFile, brainListDirectory, brainSearch } from "./brain-read.js";
-import { brainWriteFiles } from "./brain-write.js";
 import {
   posthogQuery,
   posthogTrend,
@@ -18,15 +17,6 @@ const registry: Record<string, ToolHandler> = {
     brainListDirectory(input as { path: string }),
   brain_search: (input) =>
     brainSearch(input as { query: string }),
-  brain_write_files: (input) =>
-    brainWriteFiles(
-      input as {
-        branch_slug: string;
-        pr_title: string;
-        pr_body: string;
-        files: { path: string; content: string }[];
-      },
-    ),
   posthog_query: (input) =>
     posthogQuery(input as { query: string }),
   posthog_trend: (input) =>
