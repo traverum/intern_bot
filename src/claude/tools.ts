@@ -1,55 +1,5 @@
 import type { NormalizedTool } from "../providers/types.js";
 
-export const brainReadTools: NormalizedTool[] = [
-  {
-    name: "brain_read_file",
-    description:
-      "Read the contents of a file from the brain (knowledge base). Use this after brain_search to read specific files.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        path: {
-          type: "string",
-          description:
-            'File path relative to repo root, e.g. "memory/wiki/cancellation-policy.md"',
-        },
-      },
-      required: ["path"],
-    },
-  },
-  {
-    name: "brain_list_directory",
-    description:
-      "List files and subdirectories in a brain directory. Use to explore the knowledge base structure.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        path: {
-          type: "string",
-          description:
-            'Directory path relative to repo root, e.g. "memory/wiki" or "" for root',
-        },
-      },
-      required: ["path"],
-    },
-  },
-  {
-    name: "brain_search",
-    description:
-      "Full-text search across the brain repo. Use this FIRST to find relevant files before reading them.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        query: {
-          type: "string",
-          description: "Search query string",
-        },
-      },
-      required: ["query"],
-    },
-  },
-];
-
 export const posthogTools: NormalizedTool[] = [
   {
     name: "posthog_query",
@@ -192,6 +142,5 @@ export const posthogTools: NormalizedTool[] = [
 ];
 
 export const allTools: NormalizedTool[] = [
-  ...brainReadTools,
   ...posthogTools,
 ];

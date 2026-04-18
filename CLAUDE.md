@@ -8,7 +8,7 @@
 
 A team of **AI coworkers** for [Veyond](knowledgebase/wiki/entities/veyond.md) — not tools, not assistants, coworkers. Each has a name, a personality, a Telegram handle, a job. You message them like you'd message anyone else on the team.
 
-First hire: **Kip**, the intern. Two jobs: *knows the numbers* (PostHog) and *knows the company* (the brain). Read-only, never hallucinates, actually pleasant to talk to.
+First hire: **Kip**, the intern. One job for now: *knows the numbers* (PostHog). Read-only, never hallucinates, actually pleasant to talk to.
 
 Full vision lives in [`knowledgebase/NORTH_STAR.md`](knowledgebase/NORTH_STAR.md). If anything in this file contradicts it, the North Star wins.
 
@@ -26,9 +26,9 @@ The knowledge that drives **building this product**. PRDs, architecture, decisio
 - See [`knowledgebase/AGENTS.md`](knowledgebase/AGENTS.md) for the full wiki maintenance protocol (ingest workflow, conflict rules, frontmatter, supersede markers).
 
 ### 2. `traverum/brain` — the *company* brain (separate GitHub repo)
-What Kip actually reads at runtime to answer company-knowledge questions ("what's our cancellation policy?"). Veyond's internal knowledge base. Not in this repo. Accessed via the GitHub API through `src/tools/brain-read.ts`.
+Veyond's internal knowledge base. Not currently wired to any agent — the brain-read tools were removed. Planned for a future agent (Archivist).
 
-**Rule of thumb:** If it's about *how we build the crew*, it's in `knowledgebase/`. If it's about *how Veyond operates* (policies, product, decisions), it's in `traverum/brain`.
+**Rule of thumb:** If it's about *how we build the crew*, it's in `knowledgebase/`. If it's about *how Veyond operates* (policies, product, decisions), it's in `traverum/brain` (not yet accessible to any agent).
 
 ---
 
@@ -67,7 +67,7 @@ The word "memory" shows up in multiple places. Keep them straight:
 |------|-------|---------|
 | **Project knowledgebase** | `knowledgebase/` | Why/how we're building the crew. You maintain it. |
 | **Active state + decisions** | `knowledgebase/awareness/` | What's in flight right now + decisions captured mid-chat. See below. |
-| **Company brain** | `traverum/brain` (external) | What Kip reads to answer questions about Veyond. Read-only for Kip. |
+| **Company brain** | `traverum/brain` (external) | Veyond's internal knowledge base. Not currently wired to any agent. |
 | **Conversation memory** | `data/sessions/kip/<chatId>.jsonl` | Per-chat message history for Kip. Last 15 exchanges. See [src/memory/conversation.ts](src/memory/conversation.ts). |
 | **Agent seed facts (target)** | `agents/<name>/MEMORY.md` | Persona-specific seed facts. Not implemented yet. |
 | **Global memory (target)** | `global_memory/` | Shared domain knowledge injected into every agent's prompt. Not implemented yet. |
@@ -98,7 +98,7 @@ We're **mid-build**, heading toward the architecture described in the wiki. The 
 - Hardcoded system prompt in [src/claude/system-prompt.ts](src/claude/system-prompt.ts)
 - Hand-rolled PostHog tools in [src/tools/posthog.ts](src/tools/posthog.ts)
 - Single Telegram bot in [src/bot.ts](src/bot.ts), grammY coupled to the agent
-- Brain read/write via GitHub API in [src/tools/brain-read.ts](src/tools/brain-read.ts) and [src/tools/brain-write.ts](src/tools/brain-write.ts)
+- No brain tools wired (removed; planned for a future Archivist agent)
 - Session JSONL in [src/memory/conversation.ts](src/memory/conversation.ts)
 
 **Target state** (not built yet — see [Agent Architecture](knowledgebase/wiki/concepts/agent_architecture.md)):

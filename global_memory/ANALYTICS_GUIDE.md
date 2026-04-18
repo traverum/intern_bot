@@ -85,4 +85,4 @@ If a question requires one of these, say so plainly; don't fake it from `$pagevi
 
 ## Cross-reference
 
-Unfamiliar business term? Check [BUSINESS.md](BUSINESS.md) or the brain. PostHog tells you the numbers; the brain tells you what they mean.
+Unfamiliar business term? Check [BUSINESS.md](BUSINESS.md). PostHog tells you the numbers; BUSINESS.md tells you what they mean.

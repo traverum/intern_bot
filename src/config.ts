@@ -45,11 +45,6 @@ export const config = {
     openaiKey: optional("OPENAI_API_KEY", ""),
   },
   toolMode: toolMode as "local" | "mcp",
-  github: {
-    token: required("GITHUB_TOKEN"),
-    brainOwner: optional("GITHUB_BRAIN_OWNER", "traverum"),
-    brainRepo: optional("GITHUB_BRAIN_REPO", "brain"),
-  },
   posthog: {
     apiKey: optional("POSTHOG_API_KEY", ""),
     projectId: optional("POSTHOG_PROJECT_ID", ""),

@@ -102,7 +102,7 @@ The tool loop iterates `response.content` by block type:
 | Block type | Handler |
 |-----------|---------|
 | `text` | Accumulate reply chunks |
-| `tool_use` | Dispatch to local tool (brain reads) |
+| `tool_use` | Dispatch to local tool (PostHog local tools) |
 | `mcp_tool_use` | Already routed by Anthropic; log for admin |
 | `mcp_tool_result` | Already executed; log for admin, don't re-dispatch |
 

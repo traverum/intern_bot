@@ -30,7 +30,7 @@ Named things: agents, companies, systems.
 
 | Page | Description | Sources |
 |------|-------------|---------|
-| [Kip](entities/kip.md) | The intern. PostHog analyst + brain reader. Voice matters. | 4 |
+| [Kip](entities/kip.md) | The intern. PostHog analyst. Voice matters. | 4 |
 | [Veyond](entities/veyond.md) | The company + the envisioned crew (Kip, Archivist, Ops, etc.) | 2 |
 
 ---

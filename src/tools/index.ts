@@ -1,4 +1,3 @@
-import { brainReadFile, brainListDirectory, brainSearch } from "./brain-read.js";
 import {
   posthogQuery,
   posthogTrend,
@@ -11,12 +10,6 @@ import {
 type ToolHandler = (input: Record<string, unknown>) => Promise<string>;
 
 const registry: Record<string, ToolHandler> = {
-  brain_read_file: (input) =>
-    brainReadFile(input as { path: string }),
-  brain_list_directory: (input) =>
-    brainListDirectory(input as { path: string }),
-  brain_search: (input) =>
-    brainSearch(input as { query: string }),
   posthog_query: (input) =>
     posthogQuery(input as { query: string }),
   posthog_trend: (input) =>

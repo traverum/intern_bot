@@ -31,7 +31,6 @@ const HTML = `<!DOCTYPE html>
     tr:last-child td { border-bottom: none; }
     .tag { display: inline-block; background: #f0f0f0; border-radius: 4px; padding: 1px 6px; font-size: 11px; margin: 1px 2px 1px 0; color: #555; }
     .tag.posthog { background: #fff3e0; color: #e65100; }
-    .tag.brain { background: #e8f5e9; color: #2e7d32; }
     .num { font-variant-numeric: tabular-nums; }
     .breakdown-bar { height: 6px; border-radius: 99px; background: #e0e0e0; margin-top: 4px; }
     .breakdown-bar-fill { height: 100%; border-radius: 99px; background: #818cf8; }
@@ -70,12 +69,11 @@ const HTML = `<!DOCTYPE html>
   <script>
     function tagClass(tool) {
       if (tool.startsWith('posthog')) return 'tag posthog';
-      if (tool.startsWith('brain')) return 'tag brain';
       return 'tag';
     }
 
     function tagLabel(tool) {
-      return tool.replace('posthog_', 'ph: ').replace('brain_', 'brain: ');
+      return tool.replace('posthog_', 'ph: ');
     }
 
     async function refresh() {
@@ -102,9 +100,7 @@ const HTML = `<!DOCTYPE html>
         const total = entry.inputTokens + entry.outputTokens;
         grandTotal += total;
         const key = entry.tools.length === 0 ? '(chat only)'
-          : entry.tools.some(t => t.startsWith('posthog')) && entry.tools.some(t => t.startsWith('brain')) ? 'posthog + brain'
           : entry.tools.some(t => t.startsWith('posthog')) ? 'posthog'
-          : entry.tools.some(t => t.startsWith('brain')) ? 'brain'
           : entry.tools[0];
         totals[key] = (totals[key] || 0) + total;
       }

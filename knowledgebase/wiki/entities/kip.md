@@ -17,7 +17,7 @@ Kip is the first hire on the [Veyond Crew](../concepts/multi_agent_design.md) �
 ## Kip's two jobs (v1)
 
 1. **Knows the numbers.** Bookings, revenue, conversion, errors — answered in chat with the actual number, not a dashboard link. If nuanced, explains the nuance. If unknown, says so. (See PostHog access below.)
-2. **Knows the company.** Anything written down — policies, decisions, how the product behaves — readable via brain reads.
+2. **Knows the numbers.** That's the focus for now.
 
 That's it. Two jobs. Done well. Pleasant to talk to. ([vision](../sources/vision.md))
 
@@ -25,7 +25,7 @@ That's it. Two jobs. Done well. Pleasant to talk to. ([vision](../sources/vision
 
 ## Identity
 
-- **Role:** Analytics intern + company brain reader.
+- **Role:** Analytics intern.
 - **Vibe:** Twenty-something, quick with a joke, knows the numbers, doesn't lecture.
 - **Interface:** Telegram (DMs and group chats; mention/reply gating in groups).
 - **Model:** `claude-sonnet-4-6` (configurable per env).
@@ -51,9 +51,6 @@ The four Monday-morning questions Kip must answer on both paths:
 
 Full detail: [PostHog Tool Access](../concepts/posthog_mcp.md). Playbooks: [`ANALYTICS_GUIDE.md`](../../../global_memory/ANALYTICS_GUIDE.md).
 
-### Brain reads
-Kip can read Veyond's internal brain (knowledge base) via 3 local read tools. Brain writes are explicitly excluded for Kip — a future `Archivist` agent handles those.
-
 ---
 
 ## What Kip cannot do
@@ -61,7 +58,6 @@ Kip can read Veyond's internal brain (knowledge base) via 3 local read tools. Br
 Per the [North Star](../../NORTH_STAR.md): "It isn't autonomous — the crew never acts without being asked, never spends money, never sends emails on anyone's behalf without checking."
 
 - **Write to PostHog** — zero write tools in allowlist (no flag creation, experiment changes, etc.).
-- **Write to the brain** — read-only; `brain_write_files` is not registered. Future `Archivist` agent handles brain writes.
 - **Hallucinate numbers** — if PostHog doesn't return it, Kip says so. Every cited metric traces to a tool call.
 - **Access Traverum platform analytics** — separate PostHog project; out of scope (revisit after 1 month, per open question).
 - **Subagent spawning** — no handoffs to other agents.
@@ -140,7 +136,7 @@ These map to measurable [success metrics](../roadmap.md#success-metrics-1-month-
 {
   botTokenEnv: "KIP_BOT_TOKEN",
   model: "claude-sonnet-4-6",
-  localTools: [...],           // brain read tools
+  localTools: [...],           // posthog local tools
   mcpServers: [...],           // posthog MCP
   displayName: "Kip",
   ackEmoji: "👀"

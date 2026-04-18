@@ -114,7 +114,7 @@ Each is unblocked-on-demand when a real question forces it. See [posthog-instrum
 
 | Agent | Status | Role |
 |---|---|---|
-| [Kip](kip.md) | In development | The intern. PostHog analyst + brain reader. |
+| [Kip](kip.md) | In development | The intern. PostHog analyst. |
 | Agent #2 | Planned (Phase 4) | TBD — proves the multi-agent architecture. |
 | Archivist | Envisioned | Keeps documentation up to date. Brain write access. |
 | Ops | Envisioned | Operational tasks. PostHog writes (flags, experiments). |

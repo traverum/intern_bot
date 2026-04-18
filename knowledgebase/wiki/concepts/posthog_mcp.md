@@ -84,7 +84,7 @@ const response = await anthropic.messages.create({
   model: config.llm.model,
   max_tokens: config.llm.maxTokens,
   system: buildSystemPrompt("kip"),
-  tools: localTools,                     // brain read tools — local dispatch
+  tools: localTools,                     // posthog local tools — local dispatch
   mcp_servers: [{
     type: "url",
     url: `https://mcp-eu.posthog.com/mcp?tools=${encodeURIComponent(ALLOWLIST.join(","))}`,
