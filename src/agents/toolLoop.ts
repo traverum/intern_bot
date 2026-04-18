@@ -6,17 +6,17 @@ import { dispatchTool } from "../tools/index.js";
 import { trackTokens } from "../utils/rate-limit.js";
 import { logOperation } from "../utils/token-log.js";
 import { allTools } from "../claude/tools.js";
+import { buildPromptString } from "./buildPrompt.js";
 
 const MAX_TOOL_ITERATIONS = 10;
 
 export async function runToolLoop(args: {
   provider: LLMProvider;
   agent: AgentConfig;
-  system: string;
   chatId: number;
   userName: string;
 }): Promise<string> {
-  const { provider, agent, system, chatId, userName } = args;
+  const { provider, agent, chatId, userName } = args;
 
   const mcpEnabled =
     config.toolMode === "mcp" &&
@@ -25,6 +25,8 @@ export async function runToolLoop(args: {
 
   const tools = selectTools(agent.localTools, mcpEnabled);
   const mcpServers = mcpEnabled ? agent.mcpServers : undefined;
+  const mcpServerNames = mcpEnabled ? agent.mcpServers.map((s) => s.name) : [];
+  const system = buildPromptString(agent.name, tools, mcpServerNames);
 
   let iterations = 0;
   let totalInput = 0;

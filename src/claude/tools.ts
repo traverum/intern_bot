@@ -54,7 +54,7 @@ export const posthogTools: NormalizedTool[] = [
   {
     name: "posthog_query",
     description:
-      "Run a HogQL query against PostHog. Use posthog_event_definitions first to discover available events and properties.",
+      "Run a HogQL query against PostHog.",
     inputSchema: {
       type: "object",
       properties: {

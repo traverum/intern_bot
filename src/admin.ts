@@ -2,6 +2,8 @@ import { createServer } from "http";
 import { getTokenStats } from "./utils/rate-limit.js";
 import { getRecentLogs } from "./utils/token-log.js";
 import { buildPromptString } from "./agents/buildPrompt.js";
+import { allTools } from "./claude/tools.js";
+import { kipConfig } from "../agents/kip/config.js";
 
 const HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -146,7 +148,16 @@ export function startAdminServer() {
     if (req.url === "/api/status") {
       const stats = getTokenStats();
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ ...stats, prompt: buildPromptString("kip") }));
+      const kipTools = allTools.filter((t) =>
+        kipConfig.localTools.includes(t.name),
+      );
+      const mcpNames = kipConfig.mcpServers.map((s) => s.name);
+      res.end(
+        JSON.stringify({
+          ...stats,
+          prompt: buildPromptString("kip", kipTools, mcpNames),
+        }),
+      );
     } else if (req.url === "/api/logs") {
       const logs = getRecentLogs();
       res.writeHead(200, { "Content-Type": "application/json" });
