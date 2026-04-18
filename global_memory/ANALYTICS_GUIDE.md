@@ -10,7 +10,9 @@ PostHog on the **EU host** (`eu.posthog.com`). Single production project — no 
 
 **Timezone: Europe/Helsinki.** When the team says "yesterday," that's Helsinki local, not UTC. Query with explicit timezone where supported.
 
-PostHog capture was added recently (commit `1d787d0`). **There is no data before that commit** — if someone asks about an earlier period, say so and suggest the clean-epoch date instead.
+**Data epoch: April 16, 2026.** PostHog capture was deployed on that date. There is no data before it — if someone asks about an earlier period, say so explicitly and suggest querying from April 16 onward.
+
+**Super-properties gap: before April 18, 2026 (commit `85bea8b`).** `channel`, `hotel_slug`, `hotel_name`, and `hotel_config_id` were added as super-properties in that commit. Events captured before April 18 will show nulls for these fields. If a query groups or filters by any of these properties, caveat that results before April 18 are incomplete.
 
 ## What's actually captured
 
