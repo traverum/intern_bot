@@ -3,21 +3,19 @@ title: "Open Questions"
 category: synthesis
 tags: [open-questions, decisions, unresolved]
 sources: [prd_v2]
-updated: 2026-04-17
+updated: 2026-04-18
 ---
 
 # Open Questions
 
-Unresolved decisions and threads as of PRD v2. ([prd_v2](sources/prd_v2.md))
+Unresolved decisions and threads. ([prd_v2](sources/prd_v2.md))
 
 ---
 
-## 1. Saved insight governance
-**Question:** Who owns the named insights [Kip](entities/kip.md) refers to by name? Who maintains them in PostHog?
+## 1. Saved insight governance (superseded — no insights exist yet)
+~~**Question:** Who owns the named insights [Kip](entities/kip.md) refers to by name?~~
 
-**Proposed resolution:** Named insights have stable IDs in PostHog. The human team maintains them. `ANALYTICS_GUIDE.md` lists which IDs are "Kip-referenceable" (blessed insights).
-
-**Status:** Proposed, not yet implemented. To do: populate `ANALYTICS_GUIDE.md` with blessed insight IDs once insights are stable in PostHog.
+**Superseded 2026-04-18:** PostHog was added recently (commit `1d787d0`) and the team hasn't built any canonical saved insights or dashboards yet. The question will re-emerge once insights exist; until then there's nothing to govern. `ANALYTICS_GUIDE.md` documents the actual event surface instead.
 
 ---
 
@@ -61,11 +59,32 @@ Unresolved decisions and threads as of PRD v2. ([prd_v2](sources/prd_v2.md))
 
 ---
 
+## 6. Internal-traffic exclusion
+**Question:** How do we filter team browsing from guest analytics? Options: IP list, email-domain rule on identified users, feature-flag-based bot-mode.
+
+**Status:** Unbuilt. Kip caveats low-volume answers in the meantime (documented in `ANALYTICS_GUIDE.md`). Revisit when inflated counts cause confusion.
+
+---
+
+## 7. When (if ever) to build a local MCP client
+**Question:** We deliberately rejected building a provider-agnostic local MCP client this session. When should that decision flip?
+
+**Revisit triggers:**
+- OpenAI becomes the primary provider (not just a fallback) for sustained use.
+- Agent #2's PostHog needs diverge from Kip's enough that two tool surfaces aren't sustainable.
+- PostHog MCP adds a tool whose absence on OpenAI causes real user pain.
+
+**Status:** Accepted decision, documented [here](../awareness/decisions/2026-04-18-two-posthog-tool-paths.md). No action until a trigger fires.
+
+---
+
 ## Resolved decisions
 
-### PostHog integration strategy (resolved 2026-04-17 in PRD v2)
-**Decision:** Use PostHog's official hosted MCP server via Anthropic's MCP connector.
-**Rationale:** Better coverage (13 vs 6 tools), vendor-maintained, broader path coverage (retention, paths, lifecycle, error tracking). Accepted ZDR non-eligibility given data sensitivity profile. Documented in PRD decisions log.
+### PostHog tool-access strategy (resolved 2026-04-18)
+**Decision:** Two paths — PostHog MCP via Anthropic's native connector on `TOOL_MODE=mcp`; 6 hand-rolled local tools for OpenAI and as Anthropic's escape hatch. No local MCP client. See [decision](../awareness/decisions/2026-04-18-two-posthog-tool-paths.md).
+
+### PostHog instrumentation v1 (resolved 2026-04-18)
+**Decision:** Add `experience_viewed` + confirm super-properties on every event. Nothing else. Everything else is deferred. See [decision](../awareness/decisions/2026-04-18-posthog-instrumentation-v1.md).
 
 ---
 

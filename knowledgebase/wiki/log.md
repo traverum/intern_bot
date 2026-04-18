@@ -9,6 +9,36 @@ grep "^## \[" wiki/log.md | tail -10
 
 ---
 
+## [2026-04-18] update | PostHog perfection session — grounding, instrumentation, two-tool-paths
+
+**Trigger:** User session focused on "perfecting PostHog." No new raw source ingested; synthesis + decisions captured directly.
+
+**Decisions captured (all in `awareness/decisions/`):**
+- `2026-04-18-posthog-instrumentation-v1.md` — add `experience_viewed` + confirm super-properties; defer everything else (no checkout/payment/cancel events in v1).
+- `2026-04-18-two-posthog-tool-paths.md` — Anthropic uses MCP connector, OpenAI uses local tools, accept drift; explicitly **don't** build a local MCP client.
+- `2026-04-18-perfecting-posthog-plan.md` — 8-axes framing; grounding matters more than tool access.
+
+**Global memory rewrites:**
+- `global_memory/BUSINESS.md` — full rewrite. Channels, commission split (8% platform, ~12% hotel, supplier rest), core nouns, personas, happy path.
+- `global_memory/ANALYTICS_GUIDE.md` — full rewrite. 3 real events (`$pageview`, `experience_viewed`, `booking_confirmed`), 4 super-properties, 7 pitfalls (Helsinki tz, multi-currency, `$revenue`=gross, clean epoch at commit `1d787d0`, etc.), Monday-question playbook, known gaps.
+
+**Wiki updates:**
+- `wiki/concepts/posthog_mcp.md` — renamed conceptually to "PostHog Tool Access"; rewrote to document both paths and why we don't build a local MCP client.
+- `wiki/entities/veyond.md` — domain section rewritten. Fixed stale claims ("Weekly booking digest / Checkout funnel v3 / Supplier engagement" insights — none exist yet). Added channels, commission, nouns, pitfalls. Points at `BUSINESS.md` + `ANALYTICS_GUIDE.md` as sources of truth.
+- `wiki/entities/kip.md` — PostHog capabilities rewritten to reflect two tool paths + the 4 Monday questions; current-vs-target table updated to reflect Phase 1 done.
+- `wiki/roadmap.md` — added Phase 0 (grounding + instrumentation, mostly ✅). Phase 1 marked done. Phase 2 "delete local tools" tasks reversed (local tools stay permanent). New Phase 2b for evals. Non-goals list now excludes local MCP client.
+- `wiki/overview.md` — status updated to 2026-04-18. Decisions table added two rows (two-paths, grounding > tools).
+- `wiki/open_questions.md` — Q1 (saved insight governance) superseded. Q6 (internal-traffic exclusion) and Q7 (when to revisit local MCP client) added. Resolved section expanded.
+- `wiki/index.md` — link to awareness layer, renamed PostHog page, bumped stats.
+
+**Current state:** `awareness/current.md` rewritten — clear ordered list of what to build next, starting with widget PR verification and the PostHog MCP API key.
+
+**Key insight from session:** The 4 Monday-morning questions the team actually asks mapped against existing instrumentation revealed that 2 of the 4 couldn't be answered — not for lack of tools but for lack of events. "Perfect PostHog" starts at instrumentation and domain grounding, not at MCP vs local. Reframes Phase 2 from "wire up MCP" to "measure the outcome after Phase 0 grounding lands."
+
+**Pages touched:** 11 wiki/awareness + 2 global_memory + 3 new decision files = 16 files.
+
+---
+
 ## [2026-04-17] ingest | PRD v2 — Veyond Crew
 
 **Source:** `raw/prd_v2_veyond_crew.md`

@@ -3,7 +3,7 @@ title: "Kip"
 category: entity
 tags: [agent, telegram, posthog, analytics, claude, ack, intern, persona]
 sources: [vision, prd_v2, ack_reaction, system_prompt_architecture]
-updated: 2026-04-17
+updated: 2026-04-18
 ---
 
 # Kip
@@ -36,15 +36,20 @@ That's it. Two jobs. Done well. Pleasant to talk to. ([vision](../sources/vision
 
 ## What Kip can do
 
-### PostHog analytics (via MCP)
-Kip has read-only access to Veyond's PostHog EU project through PostHog's hosted MCP server. He can answer:
-- "How many bookings last week broken down by day?" — `query-trends`
-- "What's the widget → checkout → confirmed conversion rate?" — `query-funnel`
-- "Who are our top suppliers by bookings?" — `execute-sql` / `query-trends`
-- "What's broken right now?" — `query-error-tracking-issues`
-- "What's in dashboard X?" — `dashboard-get`
+### PostHog analytics (two paths)
+Kip has read-only access to Veyond's PostHog EU project. Tool access depends on provider + `TOOL_MODE`:
 
-Full tool allowlist: see [PostHog MCP Integration](../concepts/posthog_mcp.md).
+- **Anthropic + `TOOL_MODE=mcp`:** PostHog's hosted MCP server, 13 vendor-maintained tools (trends, funnels, retention, paths, lifecycle, HogQL, insights, dashboards, error tracking).
+- **Anthropic + `TOOL_MODE=local`** or **OpenAI (always local):** 6 hand-rolled local tools covering query/trend/funnel/event-definitions/dashboards/feature-flags.
+
+The four Monday-morning questions Kip must answer on both paths:
+
+1. "How many widget visitors yesterday/today?" — `$pageview` trend
+2. "How many unique visitors?" — unique `distinct_id` count
+3. "Which hotels drive the most traffic?" — `$pageview` grouped by `hotel_slug` (white-label only)
+4. "Which experiences get the most interest?" — `experience_viewed` grouped by `experience_title`
+
+Full detail: [PostHog Tool Access](../concepts/posthog_mcp.md). Playbooks: [`ANALYTICS_GUIDE.md`](../../../global_memory/ANALYTICS_GUIDE.md).
 
 ### Brain reads
 Kip can read Veyond's internal brain (knowledge base) via 3 local read tools. Brain writes are explicitly excluded for Kip — a future `Archivist` agent handles those.
@@ -114,14 +119,16 @@ These map to measurable [success metrics](../roadmap.md#success-metrics-1-month-
 
 ## Current state vs. target state
 
-| Dimension | Current (intern-bot) | Target (PRD v2) |
-|-----------|---------------------|-----------------|
-| Persona | Hardcoded 3k-word `.ts` constant | `agents/kip/SOUL.md` markdown file |
-| PostHog | 6 hand-rolled tools | 13-tool MCP allowlist (read-only) |
-| Global memory | Embedded in Kip prompt | Shared `global_memory/` files |
-| Cache | None | Cache boundary at `<!-- VEYOND_CACHE_BOUNDARY -->` |
-| Ack | 10-20s silence | `👀` reaction on receive |
-| Gateway | Tangled with agent logic | Pure `runAgent()` in `src/agents/` |
+| Dimension | Current | Target |
+|-----------|---------|--------|
+| Persona | ✅ `agents/kip/SOUL.md` markdown file | Same |
+| Provider | ✅ Anthropic *or* OpenAI (`LLM_PROVIDER`) | Anthropic primary, OpenAI fallback |
+| PostHog | ✅ 6 local tools; MCP connector wired but token not populated | Anthropic on `TOOL_MODE=mcp`, OpenAI on local (permanent) |
+| Global memory | ✅ `global_memory/BUSINESS.md` + `ANALYTICS_GUIDE.md` (rewritten 2026-04-18) | Same, expand as questions force it |
+| Widget events | ⏳ `experience_viewed` wiring in progress | 3 events + 4 super-properties |
+| Cache | ✅ Boundary at `<!-- VEYOND_CACHE_BOUNDARY -->` | Same |
+| Ack | ☐ Hard-coded `"typing"` today | `👀` reaction on receive (Phase 3) |
+| Gateway | ✅ Pure `runAgent()` + `gateway/telegram.ts` | Same |
 
 ---
 

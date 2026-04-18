@@ -1,7 +1,7 @@
 ---
 title: "Wiki Index"
 category: index
-updated: 2026-04-17
+updated: 2026-04-18
 ---
 
 # Wiki Index
@@ -9,6 +9,8 @@ updated: 2026-04-17
 All pages in this wiki, organized by category. Updated on every ingest.
 
 > **Above the wiki:** [`/NORTH_STAR.md`](../NORTH_STAR.md) (vision), [`/README.md`](../README.md) (project intro), [`/AGENTS.md`](../AGENTS.md) (wiki maintenance instructions).
+> **Live status:** [`awareness/current.md`](../awareness/current.md) — what's in flight right now.
+> **Decisions:** [`awareness/decisions/`](../awareness/decisions/) — choices captured mid-session before context is lost.
 
 ---
 
@@ -40,7 +42,7 @@ Architectural patterns, decisions, and ideas.
 | Page | Description | Sources |
 |------|-------------|---------|
 | [Agent Architecture](concepts/agent_architecture.md) | File-driven agents, three boundaries, tool loop, skills on-demand, prompt modes | 2 |
-| [PostHog MCP Integration](concepts/posthog_mcp.md) | 13-tool read-only allowlist, Anthropic MCP connector, security posture | 1 |
+| [PostHog Tool Access](concepts/posthog_mcp.md) | Two paths: MCP on Anthropic, local tools on OpenAI; no local MCP client | 1 |
 | [Prompt Caching](concepts/prompt_caching.md) | buildSystemPrompt compiler, 11-section skeleton, context file priorities | 2 |
 | [Multi-Agent Design](concepts/multi_agent_design.md) | Composition, global memory, per-agent trust levels, future crew roster | 1 |
 | [Ack Reaction](concepts/ack_reaction.md) | grammY pattern for `👀` ack on receipt; removes on reply | 1 |
@@ -60,8 +62,18 @@ Raw source summaries — one page per ingested document.
 
 ---
 
+## Awareness (not in wiki, linked for discovery)
+
+| Path | What |
+|---|---|
+| [`awareness/current.md`](../awareness/current.md) | Live snapshot of what's in flight |
+| [`awareness/decisions/`](../awareness/decisions/) | 5 decision files (provider abstraction, instrumentation v1, two-posthog-tool-paths, perfecting-posthog-plan, +1 earlier) |
+
+---
+
 ## Stats
 
 - **Total pages:** 14
 - **Sources ingested:** 4 (1 vision + 3 raw)
-- **Last updated:** 2026-04-17
+- **Decision files:** 5 (2026-04-18 cluster: 4)
+- **Last updated:** 2026-04-18

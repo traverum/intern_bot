@@ -3,7 +3,7 @@ title: "Overview — Veyond Crew"
 category: synthesis
 tags: [overview, crew, kip, vision, architecture, synthesis]
 sources: [vision, prd_v2]
-updated: 2026-04-17
+updated: 2026-04-18
 ---
 
 # Overview — Veyond Crew
@@ -36,11 +36,11 @@ The personality and the architecture are not separate concerns. The vision says 
 
 ---
 
-## Status as of 2026-04-17
+## Status as of 2026-04-18
 
-In development. Existing `intern-bot` codebase is the starting point. PRD v2 is being implemented across 4 phases over ~4–5 weeks. See [Roadmap](roadmap.md).
+Phase 1 foundations done. Phase 0 (grounding + widget instrumentation) effectively done this session — `global_memory/BUSINESS.md` and `ANALYTICS_GUIDE.md` rewritten, widget `experience_viewed` wiring in progress. Phase 2 (PostHog MCP on Anthropic) blocked only on the PostHog MCP API key. See [`awareness/current.md`](../awareness/current.md) for the live snapshot.
 
-The wiki currently captures: the vision, the PRD, the system prompt architecture pattern, and the ack reaction UX pattern. Three raw sources ingested.
+Architectural direction clarified: **two PostHog tool paths, not a local MCP client.** Anthropic uses PostHog MCP; OpenAI uses local tools; drift accepted. See [decision](../awareness/decisions/2026-04-18-two-posthog-tool-paths.md).
 
 ---
 
@@ -60,7 +60,7 @@ The agent runner is pure: `(agentName, chatId, userText) → reply`. Swap the ga
 
 ## Kip in one paragraph
 
-[Kip](entities/kip.md) reads Veyond's analytics via PostHog's official MCP server — 13 read-only tools on the EU endpoint — and reads the company brain via 3 local tools. He answers in Telegram in his own voice (DM and group chats with mention/reply gating). He cannot write to PostHog or the brain — by design; future `Archivist` and `Ops` agents will get write access with their own allowlists. His persona lives in `agents/kip/SOUL.md`, his domain knowledge in `global_memory/`, and his prompt is assembled by a `buildSystemPrompt` compiler with a fixed 11-section skeleton.
+[Kip](entities/kip.md) reads Veyond's analytics via PostHog (MCP on Anthropic, 6 local tools on OpenAI or as Anthropic's escape hatch) and reads the company brain via 3 local tools. He answers in Telegram in his own voice (DM and group chats with mention/reply gating). He cannot write to PostHog or the brain — by design; future `Archivist` and `Ops` agents will get write access with their own allowlists. His persona lives in `agents/kip/SOUL.md`, his domain knowledge in `global_memory/BUSINESS.md` + `ANALYTICS_GUIDE.md`, and his prompt is assembled by a `buildSystemPrompt` compiler with a fixed 11-section skeleton.
 
 ---
 
@@ -70,8 +70,10 @@ The agent runner is pure: `(agentName, chatId, userText) → reply`. Swap the ga
 |----------|-----------|--------|
 | Coworkers, not tools | Voice → daily use → real value | [vision](sources/vision.md) |
 | File-driven agents | Swap `SOUL.md`, get a different agent | [prd_v2](sources/prd_v2.md), [system_prompt_architecture](sources/system_prompt_architecture.md) |
-| PostHog via MCP | 13 read tools maintained by vendor; no parallel maintenance | [prd_v2](sources/prd_v2.md) |
+| PostHog via MCP on Anthropic | 13 read tools maintained by vendor; no parallel maintenance | [prd_v2](sources/prd_v2.md) |
+| Keep local PostHog tools as permanent citizens | OpenAI fallback + Anthropic escape hatch; don't build a local MCP client | [two-posthog-tool-paths](../awareness/decisions/2026-04-18-two-posthog-tool-paths.md) |
 | Explicit tool allowlist | New PostHog write tools don't silently appear in Kip's belt | [prd_v2](sources/prd_v2.md) |
+| Grounding > tools | Rich `BUSINESS.md` + `ANALYTICS_GUIDE.md` moves accuracy more than adding tools | [perfecting-posthog-plan](../awareness/decisions/2026-04-18-perfecting-posthog-plan.md) |
 | Decouple gateway from agent | One pure runner; multiple callers (Telegram, cron, HTTP) | [prd_v2](sources/prd_v2.md) |
 | Cache boundary in prompt | Stable above (persona, domain) cached; dynamic below (status, date) re-tokenized | [prd_v2](sources/prd_v2.md), [system_prompt_architecture](sources/system_prompt_architecture.md) |
 | Ack reaction (`👀`) on receipt | Fills the 10–20s tool-call silence | [ack_reaction](sources/ack_reaction.md) |
