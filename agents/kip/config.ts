@@ -10,6 +10,8 @@ export interface AgentConfig {
   ackEmoji: string;
   localTools: string[];
   mcpServers: McpServerConfig[];
+  /** If set, overrides the global TOOL_MODE env var for this agent. */
+  toolMode?: "local" | "mcp";
 }
 
 // PostHog MCP — only used when TOOL_MODE=mcp (and LLM_PROVIDER=anthropic).

@@ -27,7 +27,6 @@ const defaultModel =
 
 export const config = {
   telegram: {
-    botToken: required("TELEGRAM_BOT_TOKEN"),
     allowedChatIds: optional("TELEGRAM_ALLOWED_CHAT_IDS", "")
       .split(",")
       .map((id) => parseInt(id.trim(), 10))

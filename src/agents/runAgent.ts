@@ -1,10 +1,12 @@
 import { kipConfig, type AgentConfig } from "../../agents/kip/config.js";
+import { pixelConfig } from "../../agents/pixel/config.js";
 import { addMessage } from "../memory/conversation.js";
 import { createProvider } from "../providers/index.js";
 import { runToolLoop } from "./toolLoop.js";
 
 const AGENTS: Record<string, AgentConfig> = {
   kip: kipConfig,
+  pixel: pixelConfig,
 };
 
 const provider = createProvider();

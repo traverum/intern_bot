@@ -15,24 +15,31 @@ try {
 } catch {}
 
 // Dynamic import so config.ts sees the env vars
-const { bot } = await import("./gateway/telegram.js");
+const { createBot } = await import("./gateway/telegram.js");
 const { startAdminServer } = await import("./admin.js");
 
 console.log("Starting Veyond Crew...");
 
 startAdminServer();
 
-bot.start({
-  onStart: (botInfo) => {
-    console.log(`Kip running as @${botInfo.username}`);
-  },
-});
+const bots = [
+  { name: "kip", bot: createBot("kip") },
+  { name: "pixel", bot: createBot("pixel") },
+];
+
+for (const { name, bot } of bots) {
+  bot.start({
+    onStart: (botInfo) => {
+      console.log(`${name} running as @${botInfo.username}`);
+    },
+  });
+}
 
 // Graceful shutdown
 for (const signal of ["SIGINT", "SIGTERM"] as const) {
   process.on(signal, () => {
     console.log(`Received ${signal}, shutting down...`);
-    bot.stop();
+    for (const { bot } of bots) bot.stop();
     process.exit(0);
   });
 }

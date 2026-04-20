@@ -18,8 +18,9 @@ export async function runToolLoop(args: {
 }): Promise<string> {
   const { provider, agent, chatId, userName } = args;
 
+  const effectiveToolMode = agent.toolMode ?? config.toolMode;
   const mcpEnabled =
-    config.toolMode === "mcp" &&
+    effectiveToolMode === "mcp" &&
     provider.name === "anthropic" &&
     agent.mcpServers.length > 0;
 
